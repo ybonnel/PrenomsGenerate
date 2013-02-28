@@ -80,10 +80,17 @@ public class GenerateJson {
                 } else {
                     prenomJson.sexe = Sexe.MIXTE;
                 }
-                prenomJson.languages = prenomTxt.langages;
+                if (prenomTxt.langages != null && !prenomTxt.langages.isEmpty()) {
+                    prenomJson.languages = prenomTxt.langages;
+                }
                 for (PrenomCsv prenomCsv : prenomscsv.get(prenomKey)) {
                     if (prenomJson.naissancesByYear == null) {
-                        prenomJson.naissancesByYear = new HashMap<Integer, Integer>();
+                        prenomJson.naissancesByYear = new TreeMap<Integer, Integer>(new Comparator<Integer>() {
+                            @Override
+                            public int compare(Integer o1, Integer o2) {
+                                return o1.compareTo(o2);
+                            }
+                        });
                     }
                     if (!prenomJson.naissancesByYear.containsKey(prenomCsv.annee)) {
                         prenomJson.naissancesByYear.put(prenomCsv.annee, prenomCsv.quantite);
@@ -91,6 +98,32 @@ public class GenerateJson {
                         prenomJson.naissancesByYear.put(prenomCsv.annee, prenomCsv.quantite + prenomJson.naissancesByYear.get(prenomCsv.annee));
                     }
                 }
+                prenomJsons.add(prenomJson);
+            }
+        }
+
+        for (String prenomCsvKey : prenomscsv.keySet()) {
+            if (!prenomstxt.containsKey(prenomCsvKey)) {
+                PrenomJson prenomJson = new PrenomJson();
+                prenomJson.sexe = Sexe.MIXTE;
+
+                prenomJson.naissancesByYear = new TreeMap<Integer, Integer>(new Comparator<Integer>() {
+                    @Override
+                    public int compare(Integer o1, Integer o2) {
+                        return o1.compareTo(o2);
+                    }
+                });
+                for (PrenomCsv prenomCsv : prenomscsv.get(prenomCsvKey)) {
+                    if (prenomJson.prenom == null) {
+                        prenomJson.prenom = prenomCsv.prenom;
+                    }
+                    if (!prenomJson.naissancesByYear.containsKey(prenomCsv.annee)) {
+                        prenomJson.naissancesByYear.put(prenomCsv.annee, prenomCsv.quantite);
+                    } else {
+                        prenomJson.naissancesByYear.put(prenomCsv.annee, prenomCsv.quantite + prenomJson.naissancesByYear.get(prenomCsv.annee));
+                    }
+                }
+
                 prenomJsons.add(prenomJson);
             }
         }
