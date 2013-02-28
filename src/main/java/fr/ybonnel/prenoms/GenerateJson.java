@@ -17,6 +17,8 @@
 package fr.ybonnel.prenoms;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -135,14 +137,48 @@ public class GenerateJson {
             }
         });
 
-        FileWriter fileWriter = new FileWriter(new File("D:/prenoms.json"));
-
+        FileWriter fileWriter = new FileWriter(new File("/Users/ybonnel/prenoms.json"));
         new GsonBuilder().setPrettyPrinting().create().toJson(prenomJsons, fileWriter);
-
-
-        fileWriter = new FileWriter(new File("D:/prenoms.min.json"));
-
+        fileWriter.close();
+        fileWriter = new FileWriter(new File("/Users/ybonnel/prenoms.min.json"));
         new GsonBuilder().create().toJson(prenomJsons, fileWriter);
+        fileWriter.close();
+
+        fileWriter = new FileWriter(new File("/Users/ybonnel/prenomsGARCON.json"));
+        new GsonBuilder().setPrettyPrinting().create().toJson(Collections2.filter(prenomJsons, new Predicate<PrenomJson>() {
+            @Override
+            public boolean apply(PrenomJson prenomJson) {
+                return prenomJson.sexe == Sexe.GARCON || prenomJson.sexe == Sexe.MIXTE;
+            }
+        }), fileWriter);
+        fileWriter.close();
+
+        fileWriter = new FileWriter(new File("/Users/ybonnel/prenomsGARCON.min.json"));
+        new GsonBuilder().create().toJson(Collections2.filter(prenomJsons, new Predicate<PrenomJson>() {
+            @Override
+            public boolean apply(PrenomJson prenomJson) {
+                return prenomJson.sexe == Sexe.GARCON || prenomJson.sexe == Sexe.MIXTE;
+            }
+        }), fileWriter);
+        fileWriter.close();
+
+        fileWriter = new FileWriter(new File("/Users/ybonnel/prenomsFILLE.json"));
+        new GsonBuilder().setPrettyPrinting().create().toJson(Collections2.filter(prenomJsons, new Predicate<PrenomJson>() {
+            @Override
+            public boolean apply(PrenomJson prenomJson) {
+                return prenomJson.sexe == Sexe.FILLE || prenomJson.sexe == Sexe.MIXTE;
+            }
+        }), fileWriter);
+        fileWriter.close();
+
+        fileWriter = new FileWriter(new File("/Users/ybonnel/prenomsFILLE.min.json"));
+        new GsonBuilder().create().toJson(Collections2.filter(prenomJsons, new Predicate<PrenomJson>() {
+            @Override
+            public boolean apply(PrenomJson prenomJson) {
+                return prenomJson.sexe == Sexe.FILLE || prenomJson.sexe == Sexe.MIXTE;
+            }
+        }), fileWriter);
+        fileWriter.close();
 
 
     }
