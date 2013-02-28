@@ -28,6 +28,6 @@ public class PrenomTxt {
     public String prenom;
     @CsvColumn("02_genre")
     public String genre;
-    @CsvColumn(value = "03_language", adapter = AdapterLangage.class)
+    @CsvColumn(value = "03_langage", adapter = AdapterLangage.class)
     public List<String> langages;
 }
