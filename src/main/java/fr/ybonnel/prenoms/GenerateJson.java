@@ -108,6 +108,7 @@ public class GenerateJson {
             if (!prenomstxt.containsKey(prenomCsvKey)) {
                 PrenomJson prenomJson = new PrenomJson();
                 prenomJson.sexe = Sexe.MIXTE;
+                prenomJson.languages = newArrayList("french");
 
                 prenomJson.naissancesByYear = new TreeMap<Integer, Integer>(new Comparator<Integer>() {
                     @Override
